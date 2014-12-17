@@ -1,3 +1,19 @@
+'''
+@author: Loïc Grobol <loic.grobol@gmail.com>
+Copyright © 2014, Loïc Grobol <loic.grobol@gmail.com>
+Permission is granted to Do What The Fuck You Want To
+with this document.
+
+See the WTF Public License, Version 2 as published by Sam Hocevar
+at http://www.wtfpl.net if you need more details.
+
+This provides the maths for the interpolation, and a few
+goodies as well, such as a crude graphical output using matplotlib
+shamelessly stolen in [scipy's doc][1].
+
+ [1]: http://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html#scipy.interpolate.interp1d
+'''
+
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
@@ -32,11 +48,9 @@ def cubic_coefs(points: '((x₀,y₀),(x₁,y₁),…)') -> '((a₀¹,a₁¹,a�
   a3 = (m[1:]-m[:-1])/(6*h)
   return zip(a0,a1,a2,a3)
   
-def bezier_interpol(points: '((x₀,y₀,y₀),(x₁,y₁,y₁),…)'):
-  pass
-
  
 def plot_interpol(points: '((x₀,y₀),(x₁,y₁),…)', interpol=cubic_interpol, samples=100):
+  '''Display a crude graphical output of the cubic interpolation using matplotlib.'''
   x, y = zip(*points)
   f = interpol(points)
   xnew = np.linspace(min(x), max(x), samples)
