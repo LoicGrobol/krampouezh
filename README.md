@@ -1,4 +1,4 @@
-pykrommenn
+krampouz
 ==========
 
 A smooth interpolator
