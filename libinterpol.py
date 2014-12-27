@@ -11,7 +11,11 @@ This provides the maths for the interpolation, and a few
 goodies as well, such as a crude graphical output using matplotlib
 shamelessly stolen in [scipy's doc][1].
 
+There is also a naive implementation of the cubic interpolation
+using the method described in [Piecewise polynomial interpolation][IWA13].
+
  [1]: http://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html#scipy.interpolate.interp1d
+ [IWA13]: http://www.opengamma.com/blog/piecewise-polynomial-interpolation
 '''
 
 import numpy as np
