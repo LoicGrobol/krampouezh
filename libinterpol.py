@@ -39,7 +39,7 @@ def cubic_coefs(points: '((x₀,y₀),(x₁,y₁),…)') -> '((a₀¹,a₁¹,a�
   sub = np.concatenate((h[:-1],[0]))
   super = np.concatenate(([0],h[1:]))
   main = np.concatenate(([1],2*(h[:-1]+h[1:]),[1]))
-  A = sp.sparse.diags((sub,main,super),(-1,0,1))
+  A = sp.sparse.diags((sub,main,super),(-1,0,1),format='csr')
   b = 6*np.concatenate(([0],s[1:]-s[:-1],[0]))
   m = spsolve(A,b)
   a0 = y
