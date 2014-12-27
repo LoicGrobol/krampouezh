@@ -1,6 +1,12 @@
 krampouezh
 =======
 
+## Running
+
+    python3 krampouezh.py --help
+
+Should tell you all you need to know
+
 ## Dependencies
 
   - Python 3
