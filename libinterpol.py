@@ -52,7 +52,9 @@ def cubic_coefs(points: '((x₀,y₀),(x₁,y₁),…)') -> '((a₀¹,a₁¹,a�
   a3 = (m[1:]-m[:-1])/(6*h)
   return zip(a0,a1,a2,a3)
   
- 
+def hermite_coefs(points: '((x₀,y₀,y₀'),(x₁,y₁,y₁'),…)') -> '((a₀¹,a₁¹,a₂¹,a₃¹),(a₀²,a₁²,a₂²,a₃³),…)':
+  pass
+
 def plot_interpol(points: '((x₀,y₀),(x₁,y₁),…)', interpol=cubic_interpol, samples=100):
   '''Display a crude graphical output of the cubic interpolation using matplotlib.'''
   x, y = zip(*points)
