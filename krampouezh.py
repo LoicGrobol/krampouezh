@@ -70,15 +70,16 @@ def interpol_tikz(points: '((x₀,y₀),(x₁,y₁),…)'):
   
 
 def main(args=sys.argv[1:]):
-    out_formats={'tikz':interpol_tikz, 'geogebra':interpol_geogebra, 'latex':interpol_latex}
+    out_formats={'tikz':interpol_tikz, 'geogebra':interpol_geogebra, 'latex':interpol_latex, 'gui':libinterpol.plot_interpol}
     # The usual argparse recipe
     parser = argparse.ArgumentParser(description="A 1D interpoler with convenient output formats.")
-    parser.add_argument('-t', '--format', choices={'tikz','latex','geogebra'}, default='tikz',
+    parser.add_argument('-t', '--format', choices=out_formats, default='tikz',
                         help='Output format (default: %(default)s)')
     parser.add_argument('points', nargs='+', help='The points to interpol in the format `(x,y)`. At least 3.')
     args = parser.parse_args(args)
-    points = [(float(s[1:-1].split(',')[0]),float(s[1:-1].split(',')[0])) for s in args.points]
-    print(out_formats[args.format](points))
+    points = [(float(s[1:-1].split(',')[0]),float(s[1:-1].split(',')[1])) for s in args.points]
+    out = out_formats[args.format](points)
+    if out: print(out)
     
 if __name__=='__main__':
   sys.exit(main(sys.argv[1:]))
