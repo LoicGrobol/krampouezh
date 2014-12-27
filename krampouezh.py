@@ -12,12 +12,21 @@ A smooth interpolation utility.
 
 import itertools as it
 import libinterpol
+import sys
+import argparse
 
 def piecewise_latex(bounds, functions):
   '''Return LaTeX code to display a function defined piecewise on intervals
      delimited by `bounds` by `functions`.'''
-  return ' + '.join('\\left({0}\\right)⋅𝟙_{{\\left[{1:f},{2:f}\\right[}}'.format(f,a,b)
+  return ' + '.join('\\left({0}\\right)⋅𝟙_{{\\left[{1},{2}\\right[}}'.format(f,a,b)
                       for f,a,b in zip(functions,bounds[:-1],bounds[1:]))
+
+def interpol_latex(points: '((x₀,y₀),(x₁,y₁),…)'):
+  '''Return a LaTeX math display of the interpolant of `points`.'''
+  x,y = zip(*sorted(points))
+  coefs = list(libinterpol.cubic_coefs(points))
+  functions = (polynomial(c,'{{coef:+}}*(x{0:+})^{{{{power:d}})}}'.format(-x0)) for c,x0 in zip(coefs,x))
+  return piecewise_latex(x,functions)
 
 def piecewise_geogebra(bounds, functions):
   '''Return Geogebra code to display a function defined piecewise on intervals
@@ -29,12 +38,12 @@ def piecewise_geogebra(bounds, functions):
 					b[0],
 					b[-1])
 
-def polynomial(coefs, template='{coef:+f}x^{power:d}', constant_template='{coef}'):
+def polynomial(coefs, template='{coef:+}x^{power:d}', constant_template='{coef}'):
   '''Return the representation of the polynomial with coefs `coefs`.
   
     >>> polynomial((1,2,3))
     '1+2x^2+3x^3'
-    >>> polynomial((1,2,3), {0:+f}×y^({3:f})'
+    >>> polynomial((1,2,3), {coef:+}×y^({power})'
     '1+2×y^(1.0)+3×y^(2.0)'
   '''
   return ''.join(template.format(coef=c,power=p) if p != 0 else constant_template.format(coef=c) for c,p in zip(coefs,it.count()) if c != 0)
@@ -43,7 +52,7 @@ def interpol_geogebra(points: '((x₀,y₀),(x₁,y₁),…)'):
   '''Return a Geogebra definition of the interpolant of `points`.'''
   x,y = zip(*sorted(points))
   coefs = list(libinterpol.cubic_coefs(points))
-  functions = (polynomial(c,'{{coef:+f}}*(x{0:+d})^{{power:d}}'.format(-x0)) for c,x0 in zip(coefs,x))
+  functions = (polynomial(c,'{{coef:+}}*(x{0:+})^{{power:d}}'.format(-x0)) for c,x0 in zip(coefs,x))
   return piecewise_geogebra(x,functions)
 
 def piecewise_tikz(bounds, functions):
@@ -56,7 +65,20 @@ def interpol_tikz(points: '((x₀,y₀),(x₁,y₁),…)'):
   '''Return a TikZ definition of the interpolant of `points`.'''
   x,y = zip(*sorted(points))
   coefs = list(libinterpol.cubic_coefs(points))
-  functions = (polynomial(c,'{{coef:+f}}*(\\x{0:+d})^({{power:d}})'.format(-x0)) for c,x0 in zip(coefs,x))
+  functions = (polynomial(c,'{{coef:+}}*(\\x{0:+})^({{power:d}})'.format(-x0)) for c,x0 in zip(coefs,x))
   return piecewise_tikz(x,functions)
   
-print(interpol_tikz(((0,1),(2,6),(3,-5),(7,0))))
+
+def main(args=sys.argv[1:]):
+    out_formats={'tikz':interpol_tikz, 'geogebra':interpol_geogebra, 'latex':interpol_latex}
+    # The usual argparse recipe
+    parser = argparse.ArgumentParser(description="A 1D interpoler with convenient output formats.")
+    parser.add_argument('-t', '--format', choices={'tikz','latex','geogebra'}, default='tikz',
+                        help='Output format (default: %(default)s)')
+    parser.add_argument('points', nargs='+', help='The points to interpol in the format `(x,y)`. At least 3.')
+    args = parser.parse_args(args)
+    points = [(float(s[1:-1].split(',')[0]),float(s[1:-1].split(',')[0])) for s in args.points]
+    print(out_formats[args.format](points))
+    
+if __name__=='__main__':
+  sys.exit(main(sys.argv[1:]))
