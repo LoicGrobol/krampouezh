@@ -25,15 +25,14 @@ def interpol_latex(points: '((x₀,y₀),(x₁,y₁),…)'):
   '''Return a LaTeX math display of the interpolant of `points`.'''
   x,y = zip(*sorted(points))
   coefs = list(libinterpol.cubic_coefs(points))
-  functions = (polynomial(c,'{{coef:+}}*(x{0:+})^{{{{power:d}})}}'.format(-x0)) for c,x0 in zip(coefs,x))
+  functions = (polynomial(c,'{{coef:+}}(x{0:+})^{{{{{{power:d}}}}}}'.format(-x0)) for c,x0 in zip(coefs,x))
   return piecewise_latex(x,functions)
 
 def piecewise_geogebra(bounds, functions):
   '''Return Geogebra code to display a function defined piecewise on intervals
      delimited by `bounds` by `functions`.'''
   b = sorted(bounds)
-  return 'Function[{0},{1},{2}]'.format(
-					'+'.join('If[x>={1:f} && x<{2:f},{0},0]'.format(f,a,b)
+  return 'Function[{0},{1},{2}]'.format('+'.join('If[x>={1:f} && x<{2:f},{0},0]'.format(f,a,b)
 					    for f,a,b in zip(functions,b[:-1],b[1:])),
 					b[0],
 					b[-1])

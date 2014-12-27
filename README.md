@@ -1,7 +1,7 @@
 Krampouezh
-=======
+==========
 
-A smooth 1d interpolator
+A smooth 1d interpolator.
 
 ## Running
 
