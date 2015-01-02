@@ -16,8 +16,6 @@ import sys
 import argparse
 import naive_tree
 
-  
-
 def main(args=sys.argv[1:]):
     out_formats=('pgf', 'geogebra', 'latex', 'gui')
     # The usual argparse recipe

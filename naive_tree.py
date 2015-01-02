@@ -17,9 +17,40 @@ Plans are for support of
 '''
 
 import itertools as it
-class Term:
-    pass
+import numbers
 
+class Term:
+    def __add__(self, y):
+        z = Scalar(y) if isinstance(y, numbers.Number) else y
+        return Sum((self, z))
+   
+    def __neg__(self):
+        return Minus(self)
+        
+    def __sub__(self, y):
+        z = Scalar(y) if isinstance(y, numbers.Number) else y
+        return self + (-z)
+        
+    def __pow__(self, n):
+        m = Scalar(n) if isinstance(n, numbers.Number) else m
+        return Power(self, m)
+    
+    def __mul__(self, y):
+        z = Scalar(y) if isinstance(y, numbers.Number) else y
+        return Scale(self, z)
+
+    def __radd__(self, y):
+        z = Scalar(y) if isinstance(y, numbers.Number) else y
+        return Sum((z, self))
+        
+    def __rsub__(self, y):
+        z = Scalar(y) if isinstance(y, numbers.Number) else y
+        return z + (-self)
+    
+    def __rmul__(self, y):
+        z = Scalar(y) if isinstance(y, numbers.Number) else y
+        return Scale(z, self)
+        
 class Sum(Term):
     def __init__(self, summands):
         self.summands = summands
@@ -142,8 +173,8 @@ class Power(Term):
 
 class RealFun(Term):
     def __init__(self, a, b, image, variable):
-        self.a = a
-        self.b = b
+        self.a = Scalar(a) if isinstance(a, numbers.Number) else a
+        self.b = Scalar(b) if isinstance(b, numbers.Number) else b
         self.image = image
         self.variable = variable
     
@@ -172,8 +203,8 @@ class RealFun(Term):
 class Indicator(Term):
     '''Indicator of [a,b[ (𝟙_{[a,b[}).'''
     def __init__(self, a, b, variable):
-        self.a = a
-        self.b = b
+        self.a = Scalar(a) if isinstance(a, numbers.Number) else a
+        self.b = Scalar(b) if isinstance(b, numbers.Number) else b
         self.variable = variable
         
     def __str__(self):
@@ -198,14 +229,7 @@ class DomainError(Exception):
     
 def piecewise_polynomial(variable, coefs, bounds):
     bounds = sorted(list(bounds))
-    img = Sum(
-	  (Scale(
-		Sum(
-		    (Scale(Scalar(c),Power(Sum((variable,Minus(Scalar(a)))),Integer(i)))
-		    for c,i in zip(piece_coefs,it.count()))),
-		Indicator(Scalar(a),Scalar(b),variable))
-	  for a,b,piece_coefs in zip(bounds[:-1],bounds[1:],coefs)))
-    #print(str(img))
+    img = Sum((Sum((c*variable**i for c,i in zip(piece_coefs,it.count())))*Indicator(a,b,variable) for a,b,piece_coefs in zip(bounds[:-1],bounds[1:],coefs)))
     return RealFun(Scalar(bounds[0]), Scalar(bounds[-1]), img, variable)
         
         

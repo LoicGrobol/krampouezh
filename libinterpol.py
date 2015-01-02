@@ -24,7 +24,6 @@ import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
 from scipy.sparse.linalg import spsolve
 
-
 def cubic_interpol(points: '((x₀,y₀),(x₁,y₁),…)'):
     '''Return the piecewise cubic interpolation of `points`.'''
     x, y = zip(*points)
