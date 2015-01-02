@@ -37,7 +37,7 @@ def main(args=sys.argv[1:]):
     args = parser.parse_args(args)
     points = tuple(tuple(float(f) for f in s[1:-1].split(',')) for s in args.points)
     if args.format == 'gui':
-        libinterpol.plot_interpol(points)
+        libinterpol.plot_interpol(tuple(p[:2] for p in points))
     else:
         out = getattr(naive_tree.piecewise_polynomial(naive_tree.Variable(), args.interpol(points), (p[0] for p in points)), args.format)()
         print(out)
