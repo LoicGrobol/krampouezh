@@ -32,7 +32,7 @@ def cubic_interpol(points: '((x₀,y₀),(x₁,y₁),…)'):
   
 
 def cubic_coefs(points: '((x₀,y₀),(x₁,y₁),…)') -> '((a₀¹,a₁¹,a₂¹,a₃¹),(a₀²,a₁²,a₂²,a₃³),…)':
-    '''Return the coefficients of the piecewise cubic interpolation of `points`.
+    '''Return the coefficients of the piecewise natural cubic interpolation of `points`.
 	Based on [Piecewise polynomial interpolation][IWA13].
 	
 	[IWA13]: http://www.opengamma.com/blog/piecewise-polynomial-interpolation'''

@@ -24,13 +24,22 @@ def main(args=sys.argv[1:]):
     parser = argparse.ArgumentParser(description="A 1D interpoler with convenient output formats.")
     parser.add_argument('-t', '--format', choices=out_formats, default=out_formats[0],
 			help='Output format (default: %(default)s)')
-    parser.add_argument('points', nargs='+', help='The points to interpol in the format `(x,y)`. At least 3.')
+    sub = parser.add_subparsers()
+    
+    cubic = sub.add_parser('cubic', help='Interpolation using natural cubic splines.')
+    cubic.add_argument('points', nargs='+', help='The points to interpol in the format `(x,y)`. At least 3.')
+    cubic.set_defaults(interpol=libinterpol.cubic_coefs)
+    
+    hermite = sub.add_parser('hermite', help='Interpolation using cubic Hermite splines.')
+    hermite.add_argument('points', nargs='+', help="The points to interpol in the format `(x,y,y')`. At least 2.")
+    hermite.set_defaults(interpol=libinterpol.hermite_coefs)
+    
     args = parser.parse_args(args)
-    points = [(float(s[1:-1].split(',')[0]),float(s[1:-1].split(',')[1])) for s in args.points]
+    points = tuple(tuple(float(f) for f in s[1:-1].split(',')) for s in args.points)
     if args.format == 'gui':
         libinterpol.plot_interpol(points)
     else:
-        out = getattr(naive_tree.piecewise_polynomial(naive_tree.Variable(), libinterpol.cubic_coefs(points), (x for x,y in points)), args.format)()
+        out = getattr(naive_tree.piecewise_polynomial(naive_tree.Variable(), args.interpol(points), (p[0] for p in points)), args.format)()
         print(out)
     
 if __name__=='__main__':
