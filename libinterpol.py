@@ -105,5 +105,5 @@ def plot_interpol(points: '((x₀,y₀),(x₁,y₁),…)', interpol=cubic_interp
   
 
 if __name__=='__main__':
-  print(list(hermite_coefs(((0,0,1),(5,0,0),(7,1,1)))))
+    print(list(hermite_coefs(((0,0,1),(5,0,0),(7,1,1)))))
 
