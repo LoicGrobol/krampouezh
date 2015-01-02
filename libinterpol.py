@@ -65,4 +65,5 @@ def plot_interpol(points: '((x₀,y₀),(x₁,y₁),…)', interpol=cubic_interp
 
 if __name__=='__main__':
   print(list(cubic_coefs(((0,-2),(3,1),(2,7),(1,3),(5,-6)))))
+  plot_interpol(((0,-2),(3,1),(2,7),(1,3),(5,-6)))
 
