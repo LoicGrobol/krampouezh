@@ -229,7 +229,7 @@ class DomainError(Exception):
     
 def piecewise_polynomial(variable, coefs, bounds):
     bounds = sorted(list(bounds))
-    img = Sum((Sum((c*(variable-a)**i for c,i in zip(piece_coefs,it.count())))*Indicator(a,b,variable) for a,b,piece_coefs in zip(bounds[:-1],bounds[1:],coefs)))
+    img = Sum(Sum(c*(variable-a)**i for c,i in zip(piece_coefs,it.count()))*Indicator(a,b,variable) for a,b,piece_coefs in zip(bounds[:-1],bounds[1:],coefs))
     return RealFun(Scalar(bounds[0]), Scalar(bounds[-1]), img, variable)
         
         
