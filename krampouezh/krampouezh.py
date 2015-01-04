@@ -12,8 +12,8 @@ at http://www.wtfpl.net if you need more details.
 A smooth interpolation utility.
 '''
 
-import lib.libinterpol as libinterpol
-import lib.naive_tree as naive_tree
+import libinterpol
+import naive_tree
 import sys
 import argparse
 
