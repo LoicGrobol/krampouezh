@@ -15,8 +15,9 @@ Should tell you all you need to know. E.g.
                                         + (((1.0*((\x+(-7.0))^0))+(-0.515686274509804*((\x+(-7.0))^1))+(0.0911764705882353*((\x+(-7.0))^2))+(-0.010130718954248366*((\x+(-7.0))^3)))*and(\x>=7.0,\x<10.0)))});
 
 
-See what you get from the result of this command in `example/`
-## Dependencies
+See what you get from the result of this command in `example/`.
+
+## Dependencies
 
   - Python 3
   - Matplotlib (and Python 3 bindings)

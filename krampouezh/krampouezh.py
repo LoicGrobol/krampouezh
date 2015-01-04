@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 '''
 @author: Loïc Grobol <loic.grobol@gmail.com>
 Copyright © 2014, Loïc Grobol <loic.grobol@gmail.com>
@@ -10,11 +12,11 @@ at http://www.wtfpl.net if you need more details.
 A smooth interpolation utility.
 '''
 
-import itertools as it
 import libinterpol
+import naive_tree
 import sys
 import argparse
-import naive_tree
+
 
 def main(args=sys.argv[1:]):
     out_formats=('pgf', 'geogebra', 'latex', 'gui')
