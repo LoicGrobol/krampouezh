@@ -1,4 +1,4 @@
-from setuptools import setup
+from distutils.core import setup
 
 setup(name='krampouezh',
       version='0.20150105',
@@ -7,6 +7,5 @@ setup(name='krampouezh',
       author='Loïc Grobol', 
       author_email='loic.grobol@gmail.com',
       license='WTFPL',
-      packages=['krampouezh'],
-      scripts=['krampouezh/krampouezh.py'], 
-      zip_safe=True)
+      packages=['libkrampouezh'],
+      scripts=['krampouezh.py'],)
