@@ -32,7 +32,7 @@ class Term:
         return self + (-z)
         
     def __pow__(self, n):
-        m = Scalar(n) if isinstance(n, numbers.Number) else m
+        m = Scalar(n) if isinstance(n, numbers.Number) else n
         return Power(self, m)
     
     def __mul__(self, y):
@@ -195,7 +195,7 @@ class RealFun(Term):
         return '{variable}⟼{image}'.format(**{a: self.__dict__[a].latex() for a in self.__dict__})
         
     def value(self, *args, **kwargs):
-        if not (a.value(*args, **kwargs) <= self.variable.value(*args, **kwargs) <=  a.value(*args, **kwargs)):
+        if not (self.a.value(*args, **kwargs) <= self.variable.value(*args, **kwargs) <=  self.b.value(*args, **kwargs)):
             raise DomainError()
         return self.image.value(*args, **kwargs)
         
@@ -220,7 +220,7 @@ class Indicator(Term):
         return 'and({variable}>={a},{variable}<{b})'.format(**{a: self.__dict__[a].pgf() for a in self.__dict__})
         
     def value(self, *args, **kwargs):
-        return 1 if a.value(*args, **kwargs) <= variable.value(*args, **kwargs) < b.value(*args, **kwargs) else 0
+        return 1 if self.a.value(*args, **kwargs) <= self.variable.value(*args, **kwargs) < self.b.value(*args, **kwargs) else 0
 
 
 class DomainError(Exception):
