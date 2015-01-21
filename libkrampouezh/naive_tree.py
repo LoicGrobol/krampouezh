@@ -18,6 +18,7 @@ Plans are for support of
 
 import itertools as it
 import numbers
+import copy
 
 class Term:
     def __add__(self, y):
@@ -51,9 +52,12 @@ class Term:
         z = Scalar(y) if isinstance(y, numbers.Number) else y
         return Scale(z, self)
         
+    def simplify(self):
+        return copy.deepcopy(self)
+        
 class Sum(Term):
     def __init__(self, summands):
-        self.summands = summands
+        self.summands = tuple(summands)
 
     def __str__(self):
         return '({})'.format('+'.join(('{}'.format(s) for s in self.summands)))
@@ -69,6 +73,10 @@ class Sum(Term):
         
     def value(self, *args, **kwargs):
         return sum(s.value(*args, **kwargs) for s in self.summands)
+    
+    def simplify(self):
+        su = tuple(s.simplify() for s in self.summands)
+        return Sum((s for s in su if not ((isinstance(s,  Scalar) and s.scalar == 0) or s == 0)))
     
     
 class Scale(Term):
@@ -90,6 +98,14 @@ class Scale(Term):
         
     def value(self, *args, **kwargs):
         return self.scale.value(*args, **kwargs)*self.vector.value(*args, **kwargs)
+    
+    def simplify(self):
+         s, v = self.scale.simplify(),  self.vector.simplify()
+         if isinstance(s, Scalar) and s.value == 0 or s == 0:
+            return Integer(0)
+         if isinstance(v, Scalar) and v.value == 0 or v == 0:
+            return Integer(0)
+         return Scale(self.scale.simplify(),  self.vector.simplify())
         
         
 class Scalar(Term):
@@ -110,32 +126,39 @@ class Scalar(Term):
 class Integer(Scalar):
     pass
 
-    
+
 class Minus(Term):
     def __init__(self, val):
         self.val = val
         
     def __str__(self):
-        return '(-{})'.format(self.val)
+        return '(-({}))'.format(self.val)
         
     def geogebra(self):
-        return '(-{})'.format(self.val.geogebra())
+        return '(-({}))'.format(self.val.geogebra())
 
     def latex(self):
-        return '(-{})'.format(self.val.latex())
+        return '(-({}))'.format(self.val.latex())
         
     def pgf(self):
-        return '(-{})'.format(self.val.pgf())
+        return '(-({}))'.format(self.val.pgf())
         
     def value(self, *args, **kwargs):
         return -self.val.value(*args, **kwargs)
+    
+    def simplify(self):
+        v = self.val.simplify()
+        if isinstance(v,  Minus):
+            return v.val.simplify()
+        if (isinstance(v,  Scalar) and v.scalar == 0) or v == 0:
+            return Integer(0)
+        return Minus(v)
         
         
 class Variable(Term):
     def __init__(self, varname='x'):
         self.varname = varname
-        
-    
+
     def __str__(self):
         return self.varname        
 
@@ -170,6 +193,16 @@ class Power(Term):
     def value(self, *args, **kwargs):
         return self.var.value(*args, **kwargs)**self.power.value(*args, **kwargs)
         
+    def simplify(self):
+        v, p = self.var.simplify(),  self.power.simplify()
+        if (isinstance(p, Scalar) and p.scalar == 0) or p == 0:
+            return Integer(1)
+        if (isinstance(p, Scalar) and p.scalar  == 1) or p == 1:
+            return v.simplify()
+        if (isinstance(v, Scalar) and v.scalar  == 0) or v == 0:
+            return Integer(0)
+        return Power(v.simplify(), p.simplify())
+        
 
 class RealFun(Term):
     def __init__(self, a, b, image, variable):
@@ -199,6 +232,9 @@ class RealFun(Term):
             raise DomainError()
         return self.image.value(*args, **kwargs)
         
+    def simplify(self):
+        return RealFun(self.a.simplify(), self.b.simplify(),  self.image.simplify(),  self.variable.simplify())
+        
 
 class Indicator(Term):
     '''Indicator of [a,b[ (𝟙_{[a,b[}).'''
@@ -221,6 +257,9 @@ class Indicator(Term):
         
     def value(self, *args, **kwargs):
         return 1 if self.a.value(*args, **kwargs) <= self.variable.value(*args, **kwargs) < self.b.value(*args, **kwargs) else 0
+        
+    def simplify(self):
+        return Indicator(self.a.simplify(), self.b.simplify(), self.variable.simplify())
 
 
 class DomainError(Exception):
@@ -231,7 +270,6 @@ def piecewise_polynomial(variable, coefs, bounds):
     bounds = sorted(list(bounds))
     img = Sum(Sum(c*(variable-a)**i for c,i in zip(piece_coefs,it.count()))*Indicator(a,b,variable) for a,b,piece_coefs in zip(bounds[:-1],bounds[1:],coefs))
     return RealFun(Scalar(bounds[0]), Scalar(bounds[-1]), img, variable)
-        
         
 def tree_fun(tree, *vars):
     '''Return a callable that returns the evaluation of `tree` afer the substitution of
@@ -245,5 +283,6 @@ if __name__=='__main__':
     import libinterpol
     c = list(libinterpol.cubic_coefs(((0,-2),(3,1),(2,7),(1,3),(5,-6))))
     f = piecewise_polynomial(x, c, (0,2,3,1,5))
-    print(f.pgf())
+    print(f)
+    print(f.simplify())
 

@@ -39,7 +39,7 @@ def main(args=sys.argv[1:]):
     if args.format == 'gui':
         libinterpol.plot_interpol(tuple(p[:2] for p in points))
     else:
-        out = getattr(naive_tree.piecewise_polynomial(naive_tree.Variable(), args.interpol(points), (p[0] for p in points)), args.format)()
+        out = getattr(naive_tree.piecewise_polynomial(naive_tree.Variable(), args.interpol(points), (p[0] for p in points)).simplify(), args.format)()
         print(out)
     
 if __name__=='__main__':
