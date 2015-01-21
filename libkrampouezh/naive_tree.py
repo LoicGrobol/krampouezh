@@ -156,6 +156,12 @@ class Minus(Term):
             return v.val.simplify()
         if (isinstance(v,  Scalar) and v.scalar == 0) or v == 0:
             return Integer(0)
+        if isinstance(v,  Scalar) and hasattr(v.scalar, '__neg__'):
+            try:
+                if v.scalar<0:
+                    return Scalar(-v.scalar)
+            except TypeError:
+                pass
         return Minus(v)
         
         
@@ -287,6 +293,5 @@ if __name__=='__main__':
     import libinterpol
     c = list(libinterpol.cubic_coefs(((0,-2),(3,1),(2,7),(1,3),(5,-6))))
     f = piecewise_polynomial(x, c, (0,2,3,1,5))
-    print(f)
-    print(f.simplify())
+    print(Minus(Scalar(-1)).simplify())
 
