@@ -101,10 +101,14 @@ class Scale(Term):
     
     def simplify(self):
          s, v = self.scale.simplify(),  self.vector.simplify()
-         if isinstance(s, Scalar) and s.value == 0 or s == 0:
+         if isinstance(s, Scalar) and s.scalar == 0 or s == 0:
             return Integer(0)
-         if isinstance(v, Scalar) and v.value == 0 or v == 0:
+         if isinstance(s, Scalar) and s.scalar == 1 or s == 1:
+            return v
+         if isinstance(v, Scalar) and v.scalar == 0 or v == 0:
             return Integer(0)
+         if isinstance(v, Scalar) and v.scalar == 1 or v == 1:
+            return s
          return Scale(self.scale.simplify(),  self.vector.simplify())
         
         
