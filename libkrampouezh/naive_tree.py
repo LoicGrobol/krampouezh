@@ -152,11 +152,11 @@ class Minus(Term):
     
     def simplify(self):
         v = self.val.simplify()
-        if isinstance(v,  Minus):
+        if isinstance(v,  Minus): # -(-a)
             return v.val.simplify()
-        if (isinstance(v,  Scalar) and v.scalar == 0) or v == 0:
+        if (isinstance(v,  Scalar) and v.scalar == 0) or v == 0: # -0
             return Integer(0)
-        if isinstance(v,  Scalar) and hasattr(v.scalar, '__neg__'):
+        if isinstance(v,  Scalar) and hasattr(v.scalar, '__neg__'): # -Scalar(a) pour a négatif
             try:
                 if v.scalar<0:
                     return Scalar(-v.scalar)
@@ -205,11 +205,11 @@ class Power(Term):
         
     def simplify(self):
         v, p = self.var.simplify(),  self.power.simplify()
-        if (isinstance(p, Scalar) and p.scalar == 0) or p == 0:
+        if (isinstance(p, Scalar) and p.scalar == 0) or p == 0: # a^0
             return Integer(1)
-        if (isinstance(p, Scalar) and p.scalar  == 1) or p == 1:
+        if (isinstance(p, Scalar) and p.scalar  == 1) or p == 1: # a^1
             return v.simplify()
-        if (isinstance(v, Scalar) and v.scalar  == 0) or v == 0:
+        if (isinstance(v, Scalar) and v.scalar  == 0) or v == 0: # 0^a (since 0^0 has already been dealt with)
             return Integer(0)
         return Power(v.simplify(), p.simplify())
         

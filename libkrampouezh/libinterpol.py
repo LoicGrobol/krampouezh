@@ -64,10 +64,10 @@ def hermite_coefs(points: "((x₀,y₀,y₀'),(x₁,y₁,y₁'),…)") -> '((a�
     
     So the coefficients of $P$ (in decreasing powers) are the components of
     $$
-      [[ 2 -2  1  1]    [[yᵢ]
+      [[ 2 -2  1  1]     [[yᵢ]
        [-3  3 -2 -1]  ×  [yᵢ₊₁] 
-       [ 0  0  1  0]     [yᵢ']
-       [ 1  0  0  0]]    [yᵢ₊₁']]
+       [ 0  0  1  0]      [yᵢ']
+       [ 1  0  0  0]]     [yᵢ₊₁']]
     $$
     That we vectorise into $H×P$ where $H$ is the above Hermite matrix and $P$ is simply
     $$

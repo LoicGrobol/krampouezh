@@ -8,4 +8,5 @@ setup(name='krampouezh',
       author_email='loic.grobol@gmail.com',
       license='WTFPL',
       packages=['libkrampouezh'],
+      install_requires=[ 'scipy','numpy','matplotlib'],
       scripts=['krampouezh.py'],)
