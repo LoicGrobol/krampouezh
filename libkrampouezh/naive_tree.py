@@ -282,7 +282,7 @@ def piecewise_polynomial(variable, coefs, bounds):
     return RealFun(Scalar(bounds[0]), Scalar(bounds[-1]), img, variable)
         
 def tree_fun(tree, *vars):
-    '''Return a callable that returns the evaluation of `tree` afer the substitution of
+    '''Return a callable that returns the evaluation of `tree` after the substitution of
        `vars`. That is `tree_fun(tree, ('x', 'y'))(2,5)` is `tree.value({'x': 2, 'y':5})`.'''
     def f(*vals):
         return tree.value({x: y for x,y in zip(vars, vals)})
