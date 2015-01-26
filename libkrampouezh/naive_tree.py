@@ -291,7 +291,7 @@ def tree_fun(tree, *vars):
 if __name__=='__main__':
     x = Variable()
     import libinterpol
-    c = list(libinterpol.cubic_coefs(((0,-2),(3,1),(2,7),(1,3),(5,-6))))
+    c = list(libinterpol.cubic_coefs(((0,0),(5,2),(7,1),(10,0))))
     f = piecewise_polynomial(x, c, (0,2,3,1,5))
-    print(Minus(Scalar(-1)).simplify())
+    print(f.simplify().pgf())
 
