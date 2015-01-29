@@ -22,6 +22,10 @@ See what you get from the result of this command in `example/`.
 So for the lazy ubuntu users, that will be
 
     sudo apt-get install python3-scipy python3-numpy python3-matplotlib
+    
+ To use the `billig` gui, you will also need pyqt5 for python3 and its qtquick bindings so
+ 
+    sudo apt-get install python3-pyqt5 python3-pyqt5.qtquick
 
 
 ## Licence
