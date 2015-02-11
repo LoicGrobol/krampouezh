@@ -170,7 +170,7 @@ class Variable(Term):
         self.varname = varname
 
     def __str__(self):
-        return self.varname        
+        return self.varname
 
     geogebra = __str__
     
@@ -180,7 +180,7 @@ class Variable(Term):
     latex = __str__
     
     def value(self, *args, **kwargs):
-        return kwargs[self.varname]
+        return kwargs[self]
         
 
 class Power(Term):
