@@ -58,6 +58,7 @@ class Term:
 class Sum(Term):
     def __init__(self, summands):
         self.summands = tuple(summands)
+        childs = self.summands
 
     def __str__(self):
         return '({})'.format('+'.join(('{}'.format(s) for s in self.summands)))
@@ -83,6 +84,7 @@ class Scale(Term):
     def __init__(self, scale, vector):
         self.scale = scale
         self.vector = vector
+        childs = (self.scale, self.vector)
 
     def __str__(self):
         return '({scale}*{vector})'.format(**self.__dict__)
@@ -115,6 +117,7 @@ class Scale(Term):
 class Scalar(Term):
     def __init__(self, scalar):
         self.scalar = scalar
+        self.childs = tuple()
 
     def __str__(self):
         return str(self.scalar)
@@ -134,6 +137,7 @@ class Integer(Scalar):
 class Minus(Term):
     def __init__(self, val):
         self.val = val
+        self.childs = (self.val,)
         
     def __str__(self):
         return '(-({}))'.format(self.val)
@@ -168,6 +172,7 @@ class Minus(Term):
 class Variable(Term):
     def __init__(self, varname='x'):
         self.varname = varname
+        self.childs = tuple()
 
     def __str__(self):
         return self.varname
@@ -187,6 +192,8 @@ class Power(Term):
     def __init__(self, var, power):
         self.var = var
         self.power = power
+        
+        self.childs = (self.var, self.power)
 
     def __str__(self):
         return '({var}**{power})'.format(**self.__dict__)
@@ -220,6 +227,8 @@ class RealFun(Term):
         self.b = Scalar(b) if isinstance(b, numbers.Number) else b
         self.image = image
         self.variable = variable
+        
+        self.childs = (self.a, self.b, self.image, self.variabe)
     
     def __str__(self):
         return r'''def f({variable}):
@@ -252,6 +261,8 @@ class Indicator(Term):
         self.a = Scalar(a) if isinstance(a, numbers.Number) else a
         self.b = Scalar(b) if isinstance(b, numbers.Number) else b
         self.variable = variable
+        
+        self.childs = (self.a, self.b, self.variable)
         
     def __str__(self):
         return '(1 if {a} <= {variable} < {b} else 0)'.format(**self.__dict__)
