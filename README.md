@@ -33,3 +33,4 @@ So for the lazy ubuntu users, that will be
 Useless details in LICENCE. All you should need to know
 is that it is released under the WTFPL Version 2 as published by Sam Hocevar
 at http://www.wtfpl.net.
+
