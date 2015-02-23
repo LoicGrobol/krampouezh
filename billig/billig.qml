@@ -33,18 +33,36 @@ ApplicationWindow {
             ctx.lineTo(endx, endy);
             ctx.stroke();
         }
+        function drawPixel(x, y, r, g, b, a, canvasData) {
+            var index = (x + y * width) * 4;
+
+            canvasData.data[index + 0] = r;
+            canvasData.data[index + 1] = g;
+            canvasData.data[index + 2] = b;
+            canvasData.data[index + 3] = a;
+        }
+        function plotFun(fun, X){
+            console.log(X, fun(X[2]));
+            var ctx = getContext("2d");
+            var canvasData = ctx.getImageData(0, 0, width, height);
+            for (var i = 0; i < width; i++){
+                drawPixel(i, 5, 0, 0, 0, 255, canvasData);
+               
+            }
+            ctx.putImageData(canvasData, 0, 0);
+        }
         onPaint: {
             drawAxes();
         }
     }
 
     Button{
-      id: redraw
-      objectName: "redraw"
-      text : "Redraw"
-      onClicked: {
-
-	  canvas.requestPaint()
-      }
+        id: redraw
+        objectName: "redraw"
+        text : "Redraw"
+        onClicked: {
+            canvas.plotFun((function(x){return 2*x;}), [0,1,2,3,4,5,6,7,8,9,10]);
+            canvas.requestPaint();
+        }
     }
 }
