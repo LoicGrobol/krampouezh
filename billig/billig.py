@@ -11,12 +11,10 @@ A gui for krampouezh
 '''
 
 import sys
-from PyQt5.QtCore import QObject, QUrl, Qt
+from PyQt5.QtCore import QObject, QUrl, Qt, QMetaObject
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQml import QQmlApplicationEngine
 
-def myFunction():
-    print('handler called')
 
 if __name__ == "__main__":
   app = QApplication(sys.argv)
@@ -30,7 +28,7 @@ if __name__ == "__main__":
   win.show()
   
   button = win.findChild(QObject, "about_button")
-  button.about_text.connect(myFunction)
-  #button.clicked.connect(myFunction) # works too
+  #button.about_text.connect(myFunction)
+
 
   sys.exit(app.exec_())

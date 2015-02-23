@@ -1,17 +1,18 @@
-import QtQuick 2.2
+import QtQuick 2.4
 import QtQuick.Window 2.1
 import QtQuick.Controls 1.2
 import QtQuick.Dialogs 1.1
 
 ApplicationWindow {
-    title: qsTr("Test Invoke")
+    title: "Billig"
     
     Canvas {
         id: canvas
+        objectName: "canvas"
         width: 500
         height: 500
         
-         onPaint: {
+        function drawAxes(){
             var ctx = getContext("2d");
             ctx.reset();
 
@@ -25,20 +26,24 @@ ApplicationWindow {
             ctx.moveTo(0, centreY);
             ctx.lineTo(width, centreY);
             ctx.stroke();
-
+        }
+        function drawLine(startx, starty, endx, endy){
+            var ctx = getContext("2d");
+            ctx.moveTo(startx, starty),
+            ctx.lineTo(endx, endy);
+            ctx.stroke();
+        }
+        onPaint: {
+            drawAxes();
         }
     }
 
-    //width: 200
-    //height: 100
-
     Button{
-      signal about_text
-      objectName: "about_button"
-      //y : 70
-      text : "About"
+      id: redraw
+      objectName: "redraw"
+      text : "Redraw"
       onClicked: {
-	  about_text()
+
 	  canvas.requestPaint()
       }
     }
