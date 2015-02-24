@@ -46,7 +46,7 @@ ApplicationWindow {
             var ctx = getContext("2d");          
             var canvasData = ctx.getImageData(0, 0, width, height);
             for (var i = 0; i < width; i++){
-                drawPixel(i,height/2-fun(i-width/2),255,0,0,255,canvasData);
+                drawPixel(i,height/2-fun(i-width/2),0,0,0,255,canvasData);
             }
             ctx.drawImage(canvasData,0,0);
             requestPaint();
