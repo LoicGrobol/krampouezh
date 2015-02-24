@@ -49,6 +49,7 @@ ApplicationWindow {
                 drawPixel(i,height/2-fun(i-width/2),255,0,0,255,canvasData);
             }
             ctx.drawImage(canvasData,0,0);
+            requestPaint();
         }
     }
 
@@ -57,8 +58,7 @@ ApplicationWindow {
         objectName: "redraw"
         text : "Redraw"
         onClicked: {
-            canvas.plotFun((function(x){return 2*x;}));
-            canvas.requestPaint();
+            canvas.plotFun(pyfun.call);
         }
     }
 }

@@ -11,10 +11,17 @@ A gui for krampouezh
 '''
 
 import sys
-from PyQt5.QtCore import QObject, QUrl, Qt, QMetaObject
+from PyQt5.QtCore import QObject, QUrl, Qt, QMetaObject, pyqtSlot
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQml import QQmlApplicationEngine
 
+class PyFun(QObject):
+    def __init__(self):
+        QObject.__init__(self)
+        
+    @pyqtSlot(float,result=float)
+    def call(self, x):
+        return 2*x
 
 if __name__ == "__main__":
   app = QApplication(sys.argv)
@@ -23,12 +30,12 @@ if __name__ == "__main__":
   ctx.setContextProperty("main", engine)
 
   engine.load('billig.qml')
+  
+  fun = PyFun()
+  ctx.setContextProperty("pyfun", fun)
 
   win = engine.rootObjects()[0]
   win.show()
-  
-  button = win.findChild(QObject, "about_button")
-  #button.about_text.connect(myFunction)
 
 
   sys.exit(app.exec_())
