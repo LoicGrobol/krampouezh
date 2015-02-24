@@ -43,16 +43,13 @@ ApplicationWindow {
         }
         function plotFun(fun, X){
             console.log(X, fun(X[2]));
+            drawAxes()
             var ctx = getContext("2d");
             var canvasData = ctx.getImageData(0, 0, width, height);
             for (var i = 0; i < width; i++){
-                drawPixel(i, 5, 0, 0, 0, 255, canvasData);
-               
+                ctx.fillRect(i,height/2-fun(i-width/2),1,1);
             }
             ctx.putImageData(canvasData, 0, 0);
-        }
-        onPaint: {
-            drawAxes();
         }
     }
 
