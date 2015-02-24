@@ -41,15 +41,14 @@ ApplicationWindow {
             canvasData.data[index + 2] = b;
             canvasData.data[index + 3] = a;
         }
-        function plotFun(fun, X){
-            console.log(X, fun(X[2]));
+        function plotFun(fun){
             drawAxes()
-            var ctx = getContext("2d");
+            var ctx = getContext("2d");          
             var canvasData = ctx.getImageData(0, 0, width, height);
             for (var i = 0; i < width; i++){
-                ctx.fillRect(i,height/2-fun(i-width/2),1,1);
+                drawPixel(i,height/2-fun(i-width/2),255,0,0,255,canvasData);
             }
-            ctx.putImageData(canvasData, 0, 0);
+            ctx.drawImage(canvasData,0,0);
         }
     }
 
@@ -58,7 +57,7 @@ ApplicationWindow {
         objectName: "redraw"
         text : "Redraw"
         onClicked: {
-            canvas.plotFun((function(x){return math.sin(x);}), [0,1,2,3,4,5,6,7,8,9,10]);
+            canvas.plotFun((function(x){return 2*x;}));
             canvas.requestPaint();
         }
     }
