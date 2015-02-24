@@ -58,7 +58,7 @@ ApplicationWindow {
         objectName: "redraw"
         text : "Redraw"
         onClicked: {
-            canvas.plotFun((function(x){return 2*x;}), [0,1,2,3,4,5,6,7,8,9,10]);
+            canvas.plotFun((function(x){return math.sin(x);}), [0,1,2,3,4,5,6,7,8,9,10]);
             canvas.requestPaint();
         }
     }
