@@ -16,33 +16,29 @@ ApplicationWindow {
             objectName: "redraw"
             text : "Redraw"
             onClicked: {
-                canvas.plotFun(pyfun.call, -10, 10, -10, 10, 1000);
+                canvas.plotFun(pyfun.call, -5, 10, -10, 10, 100000);
             }
         }
     
         Canvas {
             id: canvas
             objectName: "canvas"
+            antialiasing: true
+            
             Layout.minimumWidth: 500
             Layout.minimumHeight: 500
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
             Layout.fillWidth: true
             Layout.fillHeight: true
             
-            function drawAxes(){
+            function drawAxes(xmin, xmax, ymin, ymax){
                 var ctx = getContext("2d");
                 ctx.reset();
 
-                var centreX = width / 2;
-                var centreY = height / 2;
-                ctx.lineWidth = 1;
-
-                ctx.beginPath();
-                ctx.moveTo(centreX, 0);
-                ctx.lineTo(centreX, height);
-                ctx.moveTo(0, centreY);
-                ctx.lineTo(width, centreY);
-                ctx.stroke();
+                var x0 = xutop(0, xmin, xmax);
+                var y0 = yutop(0, ymin, ymax);
+                drawLine(x0, 0, x0, height);
+                drawLine(0, y0, width, y0);
             }
             function xutop(x, xmin, xmax){
                 // ppu = width/(xmax-xmin);
@@ -54,6 +50,7 @@ ApplicationWindow {
             }
             function drawLine(startx, starty, endx, endy){
                 var ctx = getContext("2d");
+                ctx.beginPath();
                 ctx.moveTo(startx, starty),
                 ctx.lineTo(endx, endy);
                 ctx.stroke();
@@ -84,7 +81,7 @@ ApplicationWindow {
                 return arr
             }
             function plotFun(fun, xmin, xmax, ymin, ymax, n){
-                drawAxes()
+                drawAxes(xmin, xmax, ymin, ymax)
                 var X = linspace(xmin, xmax, n);
                 var Y = X.map(fun)
                 plot(X, Y, xmin, xmax, ymin, ymax);
