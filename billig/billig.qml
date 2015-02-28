@@ -16,7 +16,8 @@ ApplicationWindow {
             objectName: "redraw"
             text : "Redraw"
             onClicked: {
-                canvas.plotFun(pyfun.call, -5, 10, -10, 10, 100000);
+                canvas.setWindow(-5,10,-10,10);
+                canvas.plotFun(pyfun.call, 100000);
             }
         }
     
@@ -31,20 +32,29 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
             
-            function drawAxes(xmin, xmax, ymin, ymax){
+            property int xmin
+            property int xmax
+            property int ymin
+            property int ymax
+            xmin: -10
+            xmax: 10
+            ymin: -10
+            ymax: 10
+            
+            function drawAxes(){
                 var ctx = getContext("2d");
                 ctx.reset();
 
-                var x0 = xutop(0, xmin, xmax);
-                var y0 = yutop(0, ymin, ymax);
+                var x0 = xutop(0);
+                var y0 = yutop(0);
                 drawLine(x0, 0, x0, height);
                 drawLine(0, y0, width, y0);
             }
-            function xutop(x, xmin, xmax){
+            function xutop(x){
                 // ppu = width/(xmax-xmin);
                 return Math.round((x-xmin)*width/(xmax-xmin));
             }
-            function yutop(y, ymin, ymax){
+            function yutop(y){
                 // ppu = height/(ymax-ymin);
                 return height-Math.round((y-ymin)*height/(ymax-ymin));
             }
@@ -63,11 +73,11 @@ ApplicationWindow {
                 canvasData.data[index + 2] = b;
                 canvasData.data[index + 3] = a;
             }
-            function plot(X, Y, xmin, xmax, ymin, ymax){
+            function plot(X, Y){
                 var ctx = getContext("2d");          
                 var canvasData = ctx.getImageData(0, 0, width, height);
                 for (var i = 0; i < X.length; i++){
-                    drawPixel(xutop(X[i], xmin, xmax), yutop(Y[i], ymin, ymax), 0, 0, 0, 255, canvasData);
+                    drawPixel(xutop(X[i]), yutop(Y[i]), 0, 0, 0, 255, canvasData);
                 }
                 ctx.drawImage(canvasData, 0, 0);
                 requestPaint();
@@ -80,13 +90,20 @@ ApplicationWindow {
                 }
                 return arr
             }
-            function plotFun(fun, xmin, xmax, ymin, ymax, n){
+            function plotFun(fun, n){
                 drawAxes(xmin, xmax, ymin, ymax)
                 var X = linspace(xmin, xmax, n);
                 var Y = X.map(fun)
-                plot(X, Y, xmin, xmax, ymin, ymax);
+                plot(X, Y);
                 requestPaint();
             }
+            function setWindow(xmn, xmx, ymn, ymx){
+                xmin = xmn;
+                xmax = xmx;
+                ymin = ymn;
+                ymax = ymx;
+            }
+            
         }
     }
 
