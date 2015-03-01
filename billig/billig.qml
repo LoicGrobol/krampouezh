@@ -51,14 +51,17 @@ ApplicationWindow {
                 drawLine(0, y0, width, y0);
             }
             function xutop(x){
+                // Conversion from plto window-relative coordinate to canvas pixel coordinates (x axis)
                 // ppu = width/(xmax-xmin);
                 return Math.round((x-xmin)*width/(xmax-xmin));
             }
             function yutop(y){
+                // Conversion from plto window-relative coordinate to canvas pixel coordinates (y axis)
                 // ppu = height/(ymax-ymin);
                 return height-Math.round((y-ymin)*height/(ymax-ymin));
             }
             function drawLine(startx, starty, endx, endy){
+                // Uses canvas pixel coordinates
                 var ctx = getContext("2d");
                 ctx.beginPath();
                 ctx.moveTo(startx, starty),
@@ -66,6 +69,7 @@ ApplicationWindow {
                 ctx.stroke();
             }
             function drawPixel(x, y, r, g, b, a, canvasData) {
+                // Uses canvas pixel coordinates
                 var index = (x + y * width) * 4;
 
                 canvasData.data[index + 0] = r;
