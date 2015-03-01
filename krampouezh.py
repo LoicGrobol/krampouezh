@@ -35,6 +35,7 @@ def main(args=sys.argv[1:]):
     hermite.set_defaults(interpol=libinterpol.hermite_coefs)
     
     args = parser.parse_args(args)
+    # args.points = ('(1,2,3)', '(2,7,1)') so s[1:-1].split(',') is '1,2,3'.split(',')…
     points = tuple(tuple(float(f) for f in s[1:-1].split(',')) for s in args.points)
     if args.format == 'gui':
         libinterpol.plot_interpol(tuple(p[:2] for p in points))
